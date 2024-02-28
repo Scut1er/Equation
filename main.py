@@ -46,14 +46,9 @@ class MyWidget(QMainWindow):
             self.text_x1.setText(f'X = {solution(a, b, c)[0]}')
             render_example(self, a, b, c)
             return
-        if solution(a, b, c)[-1] == 'Real':
+        else:
             self.text_x1.setText(f'X<sub>1</sub> = {solution(a, b, c)[0]}')
             self.text_x2.setText(f'X<sub>2</sub> = {solution(a, b, c)[1]}')
-            render_example(self, a, b, c)
-            return
-        if solution(a, b, c)[-1] == 'Complex':
-            self.text_x1.setText(f'X<sub>1</sub> = {solution(a, b, c)[0][1:-1]}')
-            self.text_x2.setText(f'X<sub>2</sub> = {solution(a, b, c)[1][1:-1]}')
             render_example(self, a, b, c)
             return
 
