@@ -2,7 +2,7 @@ import cmath
 import math
 
 
-def clear(self):
+def clear(self):  # очистка элементов интерфейса
     self.error_label.setText('')
     self.warning_label.setText('')
     self.text_x1.setText('')
@@ -12,29 +12,27 @@ def clear(self):
     self.input_c.setStyleSheet('')
 
 
-def render_example(self, a, b, c):
+def render_example(self, a, b, c):  # рендер строки с отображением уравнения
+    def is_int(n):
+        if n % 1 == 0:
+            return int(n)
+        return n
+
     arg1 = 'x<sup>2</sup>'
     arg2 = 'x'
     if a == b == c == 0:
         return self.example.setText(f'0x<sup>2</sup>+0x+0=0')
-    if a % 1 == 0:
-        a = int(a)
-    if b % 1 == 0:
-        b = int(b)
-    if c % 1 == 0:
-        c = int(c)
-    if a == 0:
+    a, b, c = is_int(a), is_int(b), is_int(c)
+    if a in [0,1]:
         a = ''
-        arg1 = ''
-    if b == 0:
+        if a == 0:
+            arg1 = ''
+    if b in [0, 1]:
         b = ''
-        arg2 = ''
+        if b == 0:
+            arg2 = ''
     if c == 0:
         c = ''
-    if a == 1:
-        a = ''
-    if b == 1:
-        b = ''
     if a == -1:
         a = '-'
     if b == -1:
@@ -42,11 +40,10 @@ def render_example(self, a, b, c):
     result = f'{a}{arg1}+{b}{arg2}+{c}=0'.replace('++', '+').replace('+-', '-').replace('+=', '=')
     if result[0] == '+':
         result = result[1:]
-
     return self.example.setText(result)
 
 
-def is_float(num):
+def is_float(num):  # проверка коэффициента на допустимость, форматирование во float
     num = num.replace(',', '.')
     if len(num) > 10:
         return None
@@ -57,13 +54,19 @@ def is_float(num):
     return num
 
 
-def is_args_zero(a, b, c):
+def uniq_solution(self, a, b, c):  # проверка коэффициентов на уникальные случаи решения уравнения
     if a == b == c == 0:
-        return True
+        return self.text_x1.setText('X - любое число')
+    if a == b == 0:
+        return self.text_x1.setText(f'Уравнение не имеет решений')
+    if a == c == 0:
+        return self.text_x1.setText(f'X = 0')
+    if a == 0:
+        return self.text_x1.setText(f'X = {-c / b}')
     return False
 
 
-def solution(a, b, c):
+def solution(a, b, c):  # решение уравнения с помощью дискриминанта
     d = b ** 2 - (4 * a * c)
     if d >= 0:
         x1 = (-b + math.sqrt(d)) / (2 * a)
